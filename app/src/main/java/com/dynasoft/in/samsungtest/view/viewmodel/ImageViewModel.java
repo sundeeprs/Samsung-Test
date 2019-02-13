@@ -45,6 +45,11 @@ public class ImageViewModel extends AndroidViewModel {
         return allImages;
     }
 
+    public void insertFavrite(ImageModel imageModel) {
+       // imageRepository.insertImages(imageModel);
+
+    }
+
 
 
     private void callRetrofit() {

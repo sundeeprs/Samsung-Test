@@ -28,7 +28,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     List<ImageModel> mImageModelList = new ArrayList<>();
     Context mContext;
+    public String title = "";
     public String thrubmNailUrl = "";
+    private ImageModel mImageModel;
 
     public ImageAdapter(Context context, List<ImageModel> imageModels) {
         this.mContext = context;
@@ -46,12 +48,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int i) {
-        ImageModel imageModel = mImageModelList.get(i);
-        imageViewHolder.imageLink.setText(imageModel.getTitle());
+        mImageModel = mImageModelList.get(i);
+        imageViewHolder.imageLink.setText("Tile "+mImageModel.getId());
         Picasso.with(mContext)
-                .load(imageModel.getUrl())
+                .load(mImageModel.getUrl())
                 .into(imageViewHolder.imageView);
-        thrubmNailUrl = imageModel.getThumbnailUrl();
+        title = mImageModel.getTitle();
+        thrubmNailUrl = mImageModel.getThumbnailUrl();
 
     }
 
@@ -76,6 +79,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                     MainActivity activity = (MainActivity) view.getContext();
                     ImageDetailFragment imageDetailFragment = new ImageDetailFragment();
                     Bundle bundle = new Bundle();
+                    bundle.putParcelable("IMAGEMODEL", mImageModel);
+                    bundle.putString("TITLE", title);
                     bundle.putString("THUMBIMAGEURL", thrubmNailUrl);
                     imageDetailFragment.setArguments(bundle);
 
