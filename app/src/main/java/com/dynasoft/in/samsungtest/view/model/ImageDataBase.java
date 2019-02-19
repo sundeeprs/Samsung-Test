@@ -15,11 +15,12 @@ import java.util.List;
  * Created by sundeep on 2/12/2019.
  */
 
-@Database(entities = {ImageModel.class}, version = 1)
+@Database(entities = {ImageModel.class, ImagesFavoriteModel.class}, version = 3)
 public abstract class ImageDataBase extends RoomDatabase {
 
     private static ImageDataBase instance;
     public abstract ImageDao imageDao();
+    public abstract ImageFavoriteDao imageFavoriteDao();
 
     public static synchronized ImageDataBase getInstance(Context context) {
         if(instance == null) {
