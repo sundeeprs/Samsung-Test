@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.dynasoft.in.samsungtest.R;
 import com.dynasoft.in.samsungtest.view.model.ImageModel;
-import com.dynasoft.in.samsungtest.view.views.ImageDetailFragment;
-import com.dynasoft.in.samsungtest.view.views.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,7 +29,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public String title = "";
     public String thrubmNailUrl = "";
     private ImageModel mImageModel;
+    private OnClickListener mOnClickListner;
 
+
+    public interface OnClickListener{
+        void onClickListener(int position);
+    }
     public ImageAdapter(Context context, List<ImageModel> imageModels) {
         this.mContext = context;
         this.mImageModelList = imageModels;
@@ -58,6 +61,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     }
 
+    public void setmOnClickListner(OnClickListener onClickListner) {
+        mOnClickListner = onClickListner;
+    }
+
     @Override
     public int getItemCount() {
         return mImageModelList.size();
@@ -73,7 +80,19 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             imageLink = (TextView) viewItem.findViewById(R.id.image_link);
             imageView = (ImageView) viewItem.findViewById(R.id.image_icon);
 
-            imageLink.setOnClickListener(new View.OnClickListener() {
+            viewItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mOnClickListner != null) {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION) {
+                            mOnClickListner.onClickListener(position);
+                        }
+                    }
+                }
+            });
+
+            /*imageLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) view.getContext();
@@ -88,14 +107,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
 
                 }
-            });
+            });*/
 
         }
 
     }
 
-    public void setImages(List<ImageModel> images) {
-        this.mImageModelList = images;
+    public void setImagesList(List<ImageModel> imanewImageModelges) {
+        this.mImageModelList = imanewImageModelges;
         notifyDataSetChanged();
     }
 

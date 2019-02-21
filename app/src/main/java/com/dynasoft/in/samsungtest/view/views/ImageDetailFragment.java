@@ -2,7 +2,6 @@ package com.dynasoft.in.samsungtest.view.views;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,7 +45,7 @@ public class ImageDetailFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image_detail, container, false);
+        return inflater.inflate(R.layout.image_detail_layout, container, false);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class ImageDetailFragment extends Fragment {
                 //TODO
                 //call View model to save the favorite to Room DB
                // mImageViewModel.insertFavrite(thumbImageView);
-                mImageViewModel.insertFavrite(mParcebleImageModel);
+                //mImageViewModel.insertFavrite(mParcebleImageModel);
             }
         });
 
