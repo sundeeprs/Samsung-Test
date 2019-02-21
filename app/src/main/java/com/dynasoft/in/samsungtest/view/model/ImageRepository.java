@@ -1,9 +1,13 @@
 package com.dynasoft.in.samsungtest.view.model;
 
+import android.app.ActionBar;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.dynasoft.in.samsungtest.view.service.ImageAPIInterface;
 
@@ -24,16 +28,25 @@ public class ImageRepository {
     public static final String TAG = ImageRepository.class.getSimpleName();
 
     private ImageFavoriteDao mImageFavoriteDao;
-    private ImageDao imageDao;
+    private static ImageDao imageDao;
     private LiveData<List<ImageModel>> allImages;
     private LiveData<List<ImagesFavoriteModel>> allFavoriteImages;
     private List<ImagesFavoriteModel> favoriteImages;
-    private Retrofit mRetrofit;
+    private static Retrofit mRetrofit;
+    private static ProgressBar mProgressBar;
 
     public ImageRepository(Application application) {
 
-        //Call Retrofit
-        callRetrofit();
+        mProgressBar = new ProgressBar(application.getBaseContext());
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 20);
+        mProgressBar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        mProgressBar.setMinimumWidth(50);
+        mProgressBar.setMinimumHeight(20);
+        mProgressBar.setTag("Loading......");
+        mProgressBar.setLayoutParams(params);
+
+       //call Retrofit Library
+        new CallRetroFit().execute();
 
         ImageDataBase imageDataBase = ImageDataBase.getInstance(application);
         imageDao = imageDataBase.imageDao();
@@ -42,7 +55,7 @@ public class ImageRepository {
         allFavoriteImages = mImageFavoriteDao.getAllFavoriteImages();
     }
 
-    private void callRetrofit() {
+    private static void callRetrofit() {
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl("http://jsonplaceholder.typicode.com")
@@ -74,7 +87,7 @@ public class ImageRepository {
         });
     }
 
-    public void insertImages(ImageModel imageModel) {
+    public static void insertImages(ImageModel imageModel) {
         new InsertImageToRepo(imageDao).execute(imageModel);
 
     }
@@ -89,7 +102,7 @@ public class ImageRepository {
 
     }
 
-    public void deleteAllImage() {
+    public static void deleteAllImage() {
         new DeleteAllImageFromRepo(imageDao).execute();
     }
 
@@ -207,6 +220,33 @@ public class ImageRepository {
         protected Void doInBackground(ImagesFavoriteModel... imagesFavoriteModels) {
             imageFavoriteDao.delete(imagesFavoriteModels[0]);
             return null;
+        }
+    }
+
+
+
+    private static class CallRetroFit extends AsyncTask<Void, Void, Void>{
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            callRetrofit();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }
