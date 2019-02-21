@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.dynasoft.in.samsungtest.R;
 import com.dynasoft.in.samsungtest.view.model.ImageModel;
+import com.dynasoft.in.samsungtest.view.model.ImagesFavoriteModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,10 +20,10 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
 
 
     private Context mContext;
-    private List<ImageModel> imageDetailsList = new ArrayList<>();
+    private List<ImagesFavoriteModel> imageDetailsList = new ArrayList<>();
 
 
-    public ImageDetailAdapter(Context context, List<ImageModel> imageModel){
+    public ImageDetailAdapter(Context context, List<ImagesFavoriteModel> imageModel){
         mContext = context;
         imageDetailsList = imageModel;
 
@@ -39,16 +40,19 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
     @Override
     public void onBindViewHolder(ImgeDetailsViewHolder holder, int position) {
 
-        ImageModel imageModel = imageDetailsList.get(position);
-        holder.title.setText(imageModel.getTitle());
-        Picasso.with(mContext).load(imageModel.getThumbnailUrl()).into(holder.imageView);
+        ImagesFavoriteModel imageModel = imageDetailsList.get(position);
+        holder.title.setText(imageModel.getFavoriteTitle());
+        Picasso.with(mContext).load(imageModel.getFavoriteThumbNail()).into(holder.imageView);
 
 
     }
 
     @Override
     public int getItemCount() {
-        return imageDetailsList.size();
+        if(imageDetailsList.size() > 0)
+            return imageDetailsList.size();
+        else
+            return 0;
     }
 
     public class ImgeDetailsViewHolder extends RecyclerView.ViewHolder {
@@ -68,5 +72,18 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
          }
 
 
+
+
+
     }
+
+    public void setFavoriteImages(List<ImagesFavoriteModel> imanewImageModelges) {
+        this.imageDetailsList = imanewImageModelges;
+        notifyDataSetChanged();
+    }
+
+    public ImagesFavoriteModel getImageFavAt(int position) {
+        return imageDetailsList.get(position);
+    }
+
 }

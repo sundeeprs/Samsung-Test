@@ -26,19 +26,20 @@ public class ImageRepository {
     private ImageFavoriteDao mImageFavoriteDao;
     private ImageDao imageDao;
     private LiveData<List<ImageModel>> allImages;
-    private List<ImagesFavoriteModel> allFavoriteImages;
+    private LiveData<List<ImagesFavoriteModel>> allFavoriteImages;
+    private List<ImagesFavoriteModel> favoriteImages;
     private Retrofit mRetrofit;
 
     public ImageRepository(Application application) {
 
-        //CallRetrofit
+        //Call Retrofit
         callRetrofit();
 
         ImageDataBase imageDataBase = ImageDataBase.getInstance(application);
         imageDao = imageDataBase.imageDao();
         mImageFavoriteDao = imageDataBase.imageFavoriteDao();
         allImages = imageDao.getAllImages();
-        //allFavoriteImages = mImageFavoriteDao.getAllFavoriteImages();
+        allFavoriteImages = mImageFavoriteDao.getAllFavoriteImages();
     }
 
     private void callRetrofit() {
@@ -92,12 +93,25 @@ public class ImageRepository {
         new DeleteAllImageFromRepo(imageDao).execute();
     }
 
+    public void deleteAllFavoriteImage() {
+        new DeleteAllFavoriteImageFromRepo(mImageFavoriteDao).execute();
+    }
+
+
+    public void deleteFavoriteImage(ImagesFavoriteModel imagesFavoriteModel) {
+        new DeleteAFavoriteImageFromRepo(mImageFavoriteDao).execute(imagesFavoriteModel);
+    }
+
     public LiveData<List<ImageModel>> getAllImages() {
         return allImages;
     }
 
-    public List<ImagesFavoriteModel> getAllFavoriteImages() {
+    public LiveData<List<ImagesFavoriteModel>> getAllFavoriteImages() {
         return allFavoriteImages;
+    }
+
+    public List<ImagesFavoriteModel> getFavoriteImages() {
+        return favoriteImages;
     }
 
 
@@ -128,7 +142,10 @@ public class ImageRepository {
         @Override
         protected Void doInBackground(ImagesFavoriteModel... imagesFavoriteModels) {
 
-            mImageFavoriteDao.insert(imagesFavoriteModels[0]);
+            //mImageFavoriteDao.deleteAllFavoriteImages();
+            for (ImagesFavoriteModel imageFavModel : imagesFavoriteModels){
+                mImageFavoriteDao.insert(imageFavModel);
+            }
             Log.i(TAG, "Image inserted to Favorite table.....");
             return null;
         }
@@ -161,6 +178,34 @@ public class ImageRepository {
         @Override
         protected Void doInBackground(Void... voids) {
             imageDao.deleteAll();
+            return null;
+        }
+    }
+
+    private static class DeleteAllFavoriteImageFromRepo extends AsyncTask<Void, Void, Void> {
+        private ImageFavoriteDao imageFavoriteDao;
+
+        private DeleteAllFavoriteImageFromRepo(ImageFavoriteDao imageFavoriteDao) {
+            this.imageFavoriteDao = imageFavoriteDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            imageFavoriteDao.deleteAllFavoriteImages();
+            return null;
+        }
+    }
+
+    private static class DeleteAFavoriteImageFromRepo extends AsyncTask<ImagesFavoriteModel, Void , Void> {
+        private ImageFavoriteDao imageFavoriteDao;
+
+        private DeleteAFavoriteImageFromRepo(ImageFavoriteDao imageFavoriteDao) {
+            this.imageFavoriteDao = imageFavoriteDao;
+        }
+
+        @Override
+        protected Void doInBackground(ImagesFavoriteModel... imagesFavoriteModels) {
+            imageFavoriteDao.delete(imagesFavoriteModels[0]);
             return null;
         }
     }

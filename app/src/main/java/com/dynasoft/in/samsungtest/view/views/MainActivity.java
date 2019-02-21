@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements ImageAdapter.OnCl
         });
 
          mImageAdapter = new ImageAdapter(this, mImageList);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayout.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayout.VERTICAL|GridLayout.HORIZONTAL, false);
         mImageRecyclerView.setLayoutManager(gridLayoutManager);
         mImageRecyclerView.setHasFixedSize(true);
         mImageRecyclerView.setAdapter(mImageAdapter);

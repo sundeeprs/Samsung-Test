@@ -42,7 +42,7 @@ public abstract class ImageDataBase extends RoomDatabase {
 
 
 
-    private static class PopulateImageListInitially extends AsyncTask<Void, Void, Void> {
+    /*private static class PopulateImageListInitially extends AsyncTask<Void, Void, Void> {
         private ImageDao imageDao;
         private List<ImageModel> mImageList = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public abstract class ImageDataBase extends RoomDatabase {
 
             return null;
         }
-    }
+    }*/
 
 
 }
