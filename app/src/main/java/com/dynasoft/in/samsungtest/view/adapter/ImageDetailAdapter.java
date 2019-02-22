@@ -43,8 +43,6 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
         ImagesFavoriteModel imageModel = imageDetailsList.get(position);
         holder.title.setText(imageModel.getFavoriteTitle());
         Picasso.with(mContext).load(imageModel.getFavoriteThumbNail()).into(holder.imageView);
-
-
     }
 
     @Override
@@ -57,8 +55,6 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
 
     public class ImgeDetailsViewHolder extends RecyclerView.ViewHolder {
 
-         String mdetailTitle = "";
-         String mdetailThumbNailURL = "";
          TextView title;
          ImageView imageView;
 
@@ -68,13 +64,7 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
              title = (TextView) viewItem.findViewById(R.id.image_view_favorite_title);
              imageView = (ImageView) viewItem.findViewById(R.id.image_view_favorite);
 
-
          }
-
-
-
-
-
     }
 
     public void setFavoriteImages(List<ImagesFavoriteModel> imanewImageModelges) {
