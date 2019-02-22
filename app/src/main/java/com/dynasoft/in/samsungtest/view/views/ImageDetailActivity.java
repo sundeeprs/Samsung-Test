@@ -76,12 +76,17 @@ public class ImageDetailActivity extends AppCompatActivity {
         imageDetailAdapter = new ImageDetailAdapter(this, mImageFavoriteList);
         mImageDetailRecyclerView.setAdapter(imageDetailAdapter);
 
+        imageDetailAdapter.notifyItemInserted(mImageFavoriteList.size() - 1);  // contacts.size() - 1 is the last element position
+
+        mImageDetailRecyclerView.scrollToPosition(imageDetailAdapter.getItemCount() - 1); // update based on adapter
+         // Toast.makeText(ImageDetailActivity.this, "No Favorite stored yet!", Toast.LENGTH_LONG).show();
         mImageDetailViewModel.getAllFavoriteImagesFromRepo().observe(this, new Observer<List<ImagesFavoriteModel>>() {
             @Override
             public void onChanged(@Nullable List<ImagesFavoriteModel> imagesFavoriteModels) {
                 mImageFavoriteList = imagesFavoriteModels;
                 imageDetailAdapter.setFavoriteImages(imagesFavoriteModels);
-                Toast.makeText(ImageDetailActivity.this, "No Favorite stored yet!", Toast.LENGTH_LONG).show();
+
+
 
             }
         });

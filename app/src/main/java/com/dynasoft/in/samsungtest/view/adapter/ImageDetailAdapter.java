@@ -1,6 +1,7 @@
 package com.dynasoft.in.samsungtest.view.adapter;
 
 import android.content.Context;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,19 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
 
     public ImagesFavoriteModel getImageFavAt(int position) {
         return imageDetailsList.get(position);
+    }
+
+    public void swipeItems(List<ImagesFavoriteModel> imagesFavoriteModels) {
+        // compute diffs
+        final ImageListDiffCalculator diffCallback = new ImageListDiffCalculator(this.imageDetailsList, imagesFavoriteModels);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        // clear contacts and add
+        this.imageDetailsList.clear();
+        this.imageDetailsList.addAll(imagesFavoriteModels);
+
+        diffResult.dispatchUpdatesTo(this); // calls adapter's notify methods after diff is computed
+
     }
 
 }
